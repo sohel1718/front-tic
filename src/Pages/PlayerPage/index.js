@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import Background from '../../Components/Background'
-import CustomInput from '../../Components/CustomInput'
-import AvtarSelection from '../../Components/AvtarSelection'
+import React,{ useState } from 'react';
+import Background from '../../Components/Background';
+import { useDispatch, useSelector } from 'react-redux';
+import { io } from 'socket.io-client';
+import CustomInput from '../../Components/CustomInput';
+import randomstring from 'randomstring';
+import AvtarSelection from '../../Components/AvtarSelection';
 import './style.scss';
+import { AddInfo } from '../../Redux/Action';
+
+const  socket = io('http://localhost:8000');
 
 const PlayerPage = ({ history }) => {
     const [data, setData] = useState({name: null, avtar: null, gameType: null, roomName: null});
+    const dispatch = useDispatch();
     const [step, setStep] = useState(1);
     const [selected, setSelected] = useState(false);
-    const [play, setPlay] = useState(false);
     const [room, setRoom] = useState(null);
     const [error, setError] = useState(null);
+
+    socket.on("connect", () => {
+        console.log(socket.id);
+    })
 
     const handleNext = (type) => {
         if (type === 'back') {     
@@ -38,8 +48,25 @@ const PlayerPage = ({ history }) => {
         }
     }
 
-    const createRoom = () => {
-        history.push('/game-page')
+    const createRoom = (type) => {
+        if (type === "create") {
+            let randomNumber = Math.floor((Math.random() * 100000) + 1);
+            let randomString = randomstring.generate();
+            let roomName = randomNumber + randomString;
+            setData({...data, roomName});
+            socket.emit('join-room', roomName)
+            dispatch(AddInfo(data));
+            history.push('/game-page')
+        } else if (type === "join") {
+            if (!room) {
+                setError("Please Enter a Room Name")
+            } else {
+                setData({...data, roomName: room});
+                socket.emit('join-room', room);
+                dispatch(AddInfo(data));
+                history.push('/game-page')
+            }
+        }
     }
 
     return (
@@ -52,7 +79,9 @@ const PlayerPage = ({ history }) => {
                     step !== 3 && (
                         <div className="form-box__wrapper">
                             <div className="form-box__wrapper__back">
-                                <img onClick={() => handleNext('back')} src="/images/undo.png" alt="" />
+                               {
+                                   step !== 1 &&  <img onClick={() => handleNext('back')} src="/images/undo.png" alt="" />
+                               }
                             </div>
                             {
                                 step === 1 && (
@@ -87,7 +116,7 @@ const PlayerPage = ({ history }) => {
                         data.gameType && !room && (
                             <div className="form-box__joinRoom">
                                 <div className="form-box__joinRoom__btn">
-                                    <button onClick={() => setRoom('create')}>Create Room</button>
+                                    <button onClick={() => createRoom('create')}>Create Room</button>
                                 </div>
                                 <span>OR</span>
                                 <div className="form-box__joinRoom__btn">
@@ -98,18 +127,10 @@ const PlayerPage = ({ history }) => {
                     )
                 }
                 {
-                   room === 'create' && (
-                        <div className="form-box__create">
-                            <input onChange={(e) => handleChange('roomName', e.target.value)} type="text" placeholder="Enter room name" />
-                            <button onClick={() => createRoom()}>Create</button>
-                        </div>
-                   ) 
-                }
-                {
                     room === 'join' && (
                         <div className="form-box__create">
                             <input onChange={(e) => handleChange('roomName', e.target.value)} type="text" placeholder="Enter room name" />
-                            <button onClick={() => createRoom()}>Join</button>
+                            <button onClick={() => createRoom('join')}>Join</button>
                         </div>
                     )
                 }

@@ -12,8 +12,9 @@ const initialState = {
 export const Reducer = (state = initialState, { type, payload }) => {
     switch(type) {
         case ADD_INFO: {
-            let temp = [...state];
-            temp = [ ...temp, { id: temp.length + 1, name: payload, listName: [] } ]
+            let temp = {...state};
+            temp = {...temp, payload}
+            debugger
             return temp
         }
         default: {
