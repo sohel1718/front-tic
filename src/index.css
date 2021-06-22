@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: StiffStaff;
+  src: url("./fonts/StiffStaff-Heavy.otf");
+}
+
+@font-face {
+  font-family: GUERRILLA;
+  src: url("./fonts/GUERRILLA-Normal.otf");
+}
+
+@font-face {
+  font-family: Pixer;
+  src: url("./fonts/Pixer-Regular.otf");
+}
+
+@font-face {
+  font-family: Mixa;
+  src: url("./fonts/Fontfabric\ -\ Mixa-ExtraLightDemo.otf");
+}

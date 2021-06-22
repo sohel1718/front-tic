@@ -1,0 +1,78 @@
+.container {
+    &__wrapper {
+        &__turn {
+            width: 100%;
+            max-width: 200px;
+            float: left;
+            img {
+                height: 20px;
+                width: 20px;
+            }
+        }
+        &__players {
+            width: 100%;
+            z-index: 2;
+            color: #000;
+            display: flex;
+            margin-bottom: 100px;
+            justify-content: space-around;
+            &__one {
+                display: flex;
+                flex-direction: column;
+                padding: 16px;
+                background: #00000073;
+                z-index: 3;
+                box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+                margin-bottom: 10px;
+                justify-content: center;
+                align-items: center;
+                color: #fff;
+                border-radius: 10px;
+                width: 100%;
+                max-width: 80px;
+                border: solid 1px #fff;
+                img {
+                    height: 40px;
+                    width: 40px;
+                }
+                span {
+                    margin: 5px 0;
+                    font-size: 16px;
+                    text-transform: capitalize;
+                }
+                #sel-x {
+                    img {
+                        height: 24px;
+                        width: 24px;
+                    }
+                }
+            }
+        }
+        &__game-board {
+            width: 100%;
+            z-index: 2;
+            min-height: 200px;
+            margin: 70px auto;
+            box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+            border-radius: 10px;
+            color: #000;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex: 0 1 auto;
+            @media only screen and (max-width: 767px) {
+                max-width: 300px;
+            }
+            background: #6648c4;
+            &__box {
+                border-radius: 10px;
+                height: 90px;
+                width: 90px;
+                margin: 5px;
+                z-index: 3;
+                background: #332267;
+            }
+        }
+    }
+}
