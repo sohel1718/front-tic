@@ -1,32 +1,20 @@
 import React from 'react';
+import Background from '../../Components/Background'
 import './style.scss';
 
 const Home = ({ history }) => {
     return (
-        <div className="white">
-            <div className="squares">
-            <div className="bg">
-                <img height="100px" width="100px" src="/images/tic-tac-toe.png" alt="" />
-                <span>TIC-TAC-TOE</span>
-            </div>
-            <div className="dev">
-                <div className="btn-box">
-                    <button onClick={() => history.push('/player')} >Getting Started</button>
-                    <span>#Developed by @_sohel.chhipa</span>
+        <Background>
+            <div className="home">
+                <div className="home__logo">
+                    <img src="/images/tic-tac.png" alt="" />
+                    <div className="home__logo__name">Tic Tac Toe</div>
                 </div>
-                <img height="100px" width="100px" src="/images/bat.png" alt="" />
-            </div>
-                <div className="square"></div>
-                <div className="square"></div>
-                <div className="square"></div>
-                <div className="square"></div>
-                <div className="square"></div>
-                <div className="square"></div>
-                <div className="square"></div>
-                <div className="square"></div>
-            </div>
-
-        </div>
+                <div className="home__start">
+                    <button onClick={() => history.push('/player')}>Let's Start</button>
+                </div>
+            </div>  
+        </Background>
     )   
 }
 

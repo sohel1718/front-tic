@@ -1,26 +1,25 @@
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
 import Background from '../../Components/Background';
-import { useDispatch, useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
 import CustomInput from '../../Components/CustomInput';
 import randomstring from 'randomstring';
 import AvtarSelection from '../../Components/AvtarSelection';
 import './style.scss';
-import { AddInfo } from '../../Redux/Action';
-
-const  socket = io('http://localhost:8000');
 
 const PlayerPage = ({ history }) => {
-    const [data, setData] = useState({name: null, avtar: null, gameType: null, roomName: null});
-    const dispatch = useDispatch();
+    const [data, setData] = useState({name: null, avtar: null, gameType: null, roomName: null, toggle: false, user: null});
+    const [joinCode, setJoin] = useState();
     const [step, setStep] = useState(1);
     const [selected, setSelected] = useState(false);
     const [room, setRoom] = useState(null);
     const [error, setError] = useState(null);
 
-    socket.on("connect", () => {
-        console.log(socket.id);
-    })
+    useEffect(() => {
+        const persistData = JSON.parse(localStorage.getItem('state'));
+        if (persistData && "avtar" in persistData) {
+            setData(persistData);
+            setSelected(persistData.selected)
+        }
+    },[]);
 
     const handleNext = (type) => {
         if (type === 'back') {     
@@ -53,21 +52,25 @@ const PlayerPage = ({ history }) => {
             let randomNumber = Math.floor((Math.random() * 100000) + 1);
             let randomString = randomstring.generate();
             let roomName = randomNumber + randomString;
-            setData({...data, roomName});
-            socket.emit('join-room', roomName)
-            dispatch(AddInfo(data));
+            let temp = {...data, roomName, selected, player: "player1"}; 
+            setData(temp);
+            localStorage.setItem('state', JSON.stringify(temp))
             history.push('/game-page')
         } else if (type === "join") {
             if (!room) {
                 setError("Please Enter a Room Name")
             } else {
-                setData({...data, roomName: room});
-                socket.emit('join-room', room);
-                dispatch(AddInfo(data));
+                let temp = {...data, roomName: joinCode, selected, player: "player2"};
+                setData(temp);
+                localStorage.setItem('state', JSON.stringify(temp))
                 history.push('/game-page')
             }
+        } else if (type === "resume") {
+            localStorage.setItem('state', JSON.stringify(data))
+            history.push('/game-page')
         }
     }
+
 
     return (
        <Background>
@@ -103,7 +106,7 @@ const PlayerPage = ({ history }) => {
                     )
                 }
                 {
-                    step === 3 && (
+                    step === 3 && !data.roomName && (
                         !data.gameType ? (
                             <div className="form-box__selectPlayer">
                                 <div className="form-box__selectPlayer__types">
@@ -127,9 +130,14 @@ const PlayerPage = ({ history }) => {
                     )
                 }
                 {
+                    step === 3 && data.roomName && (
+                        <button className="form-box__resume-btn" onClick={() => createRoom('resume')}>Resume</button>
+                    )
+                }
+                {
                     room === 'join' && (
                         <div className="form-box__create">
-                            <input onChange={(e) => handleChange('roomName', e.target.value)} type="text" placeholder="Enter room name" />
+                            <input onChange={(e) => setJoin(e.target.value)} type="text" placeholder="Enter room name" />
                             <button onClick={() => createRoom('join')}>Join</button>
                         </div>
                     )

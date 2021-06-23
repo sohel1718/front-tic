@@ -8,6 +8,14 @@
             width: 55px;
         }
     }
+    &__resume-btn {
+        height: max-content;
+        font-family: GUERRILLA;
+        margin-top: 250px;
+        font-size: 30px;
+        width: max-content;
+        padding: 0 20px;
+    }
     &__selectPlayer {
         &__types {
             margin: 200px auto;
