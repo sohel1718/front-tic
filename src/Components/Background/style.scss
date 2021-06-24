@@ -122,32 +122,3 @@ body {
     color: #fff;
     z-index: 2;
 }
-
-/**
- * CODEPEN PROMOTION
- * unrelated to particle system
- */
-
-.codepen-promo:active, .codepen-promo:hover, .codepen-promo:link, .codepen-promo:visited {
-  bottom: 30px;
-  display: block;
-  position: absolute;
-  right: 30px;
-  width: 200px;
-  z-index: 99;
-}
-  
-.codepen-promo-image {
-  width: 100%;
-}
-
-.unsplash-promo:active, .unsplash-promo:hover, .unsplash-promo:link, .unsplash-promo:visited {
-  bottom: 30px;
-  display: block;
-  position: absolute;
-  left: 30px;
-  width: 400px;
-  z-index: 99;
-  color: #666;
-  text-decoration: none;
-}

@@ -190,6 +190,10 @@ const GamePage = () => {
         <Background>
             <div className="container">
                 <div className="container__wrapper">
+                    <div className="container__wrapper__room-code">
+                        <div id="left" onClick={() => navigator.clipboard.writeText(persistData.roomName)}>JoinCode</div>
+                        <div id="right">{persistData.roomName}</div>
+                    </div>
                     <div className="container__wrapper__game-board">
                         {
                             winner && <div className="winnerImg">
